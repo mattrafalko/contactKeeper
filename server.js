@@ -1,7 +1,12 @@
 const express = require('express');
+const connectDB = require('./config/db');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+connectDB();
+
+//Init Middleware
+app.use(express.json({ extended: false }));
 
 //Define routes
 app.use('/api/users', require('./routes/users'));
