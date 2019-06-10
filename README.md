@@ -2,7 +2,7 @@
 
 ## About
 
-This app allows a user to register and store, remove, and update contact information.
+This app allows a user to register and perform CRUD operations on contact records.
 
 ## Tools Used
 
