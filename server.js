@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 connectDB();
 
-//Init Middleware
+//From bodyParser: middleware that parses both json and urlencoded
 app.use(express.json({ extended: false }));
 
 //Define routes

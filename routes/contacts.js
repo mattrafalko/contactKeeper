@@ -10,6 +10,7 @@ const router = express.Router();
 //@desc: get all users contacts
 //@access: private
 router.get('/', authMiddleware, async (req, res) => {
+  // Find the contacts that belong to this user, LIFO
   try {
     const contacts = await Contact.find({ user: req.user.id }).sort({
       date: -1
@@ -84,21 +85,24 @@ router.put('/:id', authMiddleware, async (req, res) => {
     contactData.name = type;
   }
 
+  // Does a contact with this idea exist?
   try {
     let contact = await Contact.findById(req.params.id);
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
-    // Validate users owns this contact
+
+    // Does the contact belong to this user?
     if (contact.user.toString() !== req.user.id) {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
     contact = await Contact.findByIdAndUpdate(
-      req.params.id,
+      req.params.id, //id of the contact
       { $set: contactData },
       { new: true }
     );
+
     res.json({ contact });
   } catch (error) {
     console.error(error.message);
@@ -110,12 +114,13 @@ router.put('/:id', authMiddleware, async (req, res) => {
 //@desc: deletes a contact
 //@access: private
 router.delete('/:id', authMiddleware, async (req, res) => {
+  // Does the contact exist?
   try {
     let contact = await Contact.findById(req.params.id);
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
-    // Validate users owns this contact
+    // Does the contact belong to this user?
     if (contact.user.toString() !== req.user.id) {
       return res.status(401).json({ message: 'Not authorized' });
     }

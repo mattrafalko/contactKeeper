@@ -9,9 +9,10 @@ const express = require('express');
 const router = express.Router();
 
 //@route GET api/auth
-//@desc: get logged in user
+//@desc: Finds user by their id
 //@access: private
 router.get('/', authMiddleware, async (req, res) => {
+  //Does a user exist with this token?
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json({ user });
@@ -22,7 +23,7 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 //@route POST api/auth
-//@desc: auth user and get token
+//@desc: Authenticates a user and provides a token
 //@access: public
 router.post(
   '/',
@@ -39,6 +40,7 @@ router.post(
     }
 
     const { email, password } = req.body;
+
     try {
       let user = await User.findOne({ email });
       if (!user) {
@@ -51,7 +53,6 @@ router.post(
         return res.status(400).json({ msg: 'invalid credentials' });
       }
 
-      //Send Json webtoken
       const payload = {
         user: { id: user.id }
       };
@@ -60,7 +61,7 @@ router.post(
         payload,
         config.get('jwtSecret'),
         {
-          expiresIn: 360000
+          expiresIn: 3600
         },
         (error, token) => {
           if (error) {

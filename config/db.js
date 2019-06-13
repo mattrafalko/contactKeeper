@@ -10,9 +10,9 @@ const connectDB = async () => {
       useFindAndModify: false
     });
 
-    console.log('successfully connected to db');
+    console.log('Successfully connected to db');
   } catch (error) {
-    console.log('couldnt connect to db', error);
+    console.log('Error connecting to DB: ', error);
   }
 };
 

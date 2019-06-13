@@ -33,7 +33,7 @@ router.post(
     const { name, email, password } = req.body;
 
     try {
-      //FindOne: checks DB to see if this value already exists.
+      // Has the email already been exhausted?
       let user = await User.findOne({ email });
       if (user) {
         res.status(400).json({ msg: 'user already exists' });
@@ -45,21 +45,22 @@ router.post(
         password
       });
 
+      // Salt and hash the password
       const salt = await bcrypt.genSalt(10);
-
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
-      //Send Json webtoken
+
       const payload = {
         user: { id: user.id }
       };
 
+      //Sign the token
       jwt.sign(
         payload,
         config.get('jwtSecret'),
         {
-          expiresIn: 360000
+          expiresIn: 3600
         },
         (error, token) => {
           if (error) {
@@ -68,8 +69,6 @@ router.post(
           res.json({ token });
         }
       );
-
-      //res.send(payload);
     } catch (error) {
       console.error(error.message);
       res.status(500).send('server error');
