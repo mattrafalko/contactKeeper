@@ -2,7 +2,6 @@ import React, { useReducer } from 'react';
 import AuthContext from './AuthContext';
 import AuthReducer from './AuthReducer';
 import {
-  SET_ALERT,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
@@ -58,12 +57,24 @@ const AuthState = props => {
   };
 
   //Login User
-  const loginUser = () => {
-    console.log('LoginUser');
+  const loginUser = async formData => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    try {
+      const res = await axios.post('/api/auth', formData, config);
+      dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+      loadUser();
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+    }
   };
   //Logout
   const logoutUser = () => {
-    console.log('logout user');
+    dispatch({ type: LOGOUT });
   };
 
   //Clear Erros

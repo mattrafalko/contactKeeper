@@ -79,7 +79,7 @@ const Register = props => {
           />
         </div>
         <div className="form-group">
-          <label for="password">Password</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             name="password"
@@ -89,7 +89,7 @@ const Register = props => {
           />
         </div>
         <div className="form-group">
-          <label for="password2">Confirm Password</label>
+          <label htmlFor="password2">Confirm Password</label>
           <input
             type="password"
             name="password2"
