@@ -44,13 +44,13 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ message: 'invalid credentials' });
+        return res.status(400).json({ message: 'Invalid credentials' });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'invalid credentials' });
+        return res.status(400).json({ message: 'Invalid credentials' });
       }
 
       const payload = {
@@ -64,9 +64,8 @@ router.post(
           expiresIn: 3600
         },
         (error, token) => {
-          if (error) {
-            throw error;
-          }
+          if (error) throw error;
+
           res.json({ token });
         }
       );

@@ -1,7 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AlertContext from '../../context/alert/AlertContext';
+import AuthContext from '../../context/auth/AuthContext';
 
-const Register = () => {
+const Register = props => {
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -9,11 +13,22 @@ const Register = () => {
     password2: ''
   });
 
-  const alertContext = useContext(AlertContext);
+  const { registerUser, error, clearErrors, isAuthenticated } = authContext;
 
   const { setAlert } = alertContext;
 
   const { name, email, password, password2 } = user;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push('/'); //Redirect user to home page
+    }
+    if (error === 'User already exists.') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, props.history]);
 
   const onChange = event => {
     setUser({
@@ -29,7 +44,11 @@ const Register = () => {
     } else if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      console.log('Register Submit');
+      registerUser({
+        name,
+        email,
+        password
+      });
     }
   };
 
@@ -82,7 +101,7 @@ const Register = () => {
         </div>
         <input
           type="submit"
-          value="register"
+          value="Register"
           className="btn btn-primary btn-block"
           required
         />
