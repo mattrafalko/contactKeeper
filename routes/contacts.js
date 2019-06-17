@@ -76,13 +76,13 @@ router.put('/:id', authMiddleware, async (req, res) => {
     contactData.name = name;
   }
   if (email) {
-    contactData.name = email;
+    contactData.email = email;
   }
   if (phone) {
-    contactData.name = phone;
+    contactData.phone = phone;
   }
   if (type) {
-    contactData.name = type;
+    contactData.type = type;
   }
 
   // Does a contact with this idea exist?
