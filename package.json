@@ -2,6 +2,9 @@
   "name": "contactkeeper",
   "version": "1.0.0",
   "description": "An App that allows users to store their contacts",
+  "engines": {
+    "node": "11.4.0"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
